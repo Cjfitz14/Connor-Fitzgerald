@@ -1,25 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EdScript : MonoBehaviour
 {
-    public GameObject giftCloneTemplate;
-    float turningSpeed = 90;
+    
+    float turningSpeed = 110;
     float speed;
     float WalkingSpeed = 1;
     float RunningMultiplier = 3;
+    float JumpForce = 3;
     Animator edsAnimator;
-
+    Rigidbody rb;
+    
     // Start is called before the first frame update
     void Start()
     {
         edsAnimator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        edsAnimator.SetBool("OnGround", true);
         edsAnimator.SetBool("IsWalking", false);
         speed = 0;
 
@@ -56,9 +61,19 @@ public class EdScript : MonoBehaviour
             transform.Rotate(Vector3.up, -turningSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space)) ;
+        { if (bool."OnGround" = true);
+            { 
+            rb.AddForce(JumpForce * Vector3.up, ForceMode.Impulse);
+            edsAnimator.SetBool("IsJumping", true);
+            edsAnimator.SetBool("OnGround", false);
+            // Instantiate(giftCloneTemplate,transform.position,transform.rotation);
+            }
+        }
+        else
         {
-            Instantiate(giftCloneTemplate,transform.position,transform.rotation);
+            edsAnimator.SetBool("IsJumping", false);
+            edsAnimator.SetBool("OnGround", true);
         }
 
         transform.position +=speed * transform.forward * Time.deltaTime;
